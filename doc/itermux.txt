@@ -1,19 +1,18 @@
-*turbux.txt*  Turbo Ruby tests with tmux
+*itermux.txt*  Turbo Ruby tests with iTerm
 
-Author:  Joshua Davey <http://joshuadavey.com/>
+Author:  Stefano Verna <http://welaika.com/>
 License: Same terms as Vim itself (see |license|)
 
 This plugin is only available if 'compatible' is not set.
 
-This plugin depends on tslime.vim, and optionally rails.vim. As with
-tslime.vim, it is only useful within a tmux session.
+This plugin optionally depends rails.vim.
 
-INTRODUCTION                                    *turbux*
+INTRODUCTION                                    *itermux*
 
-Turbux is designed to speed up your TDD cycle by using a single key
+iTermux is designed to speed up your TDD cycle by using a single key
 mapping to run the most relevant test based on the current file in vim.
-It uses tmux's scriptability to send commands to a chosen pane in your
-tmux session, by way of tslime.vim.
+It uses iTerm2's scriptability to send commands to a chosen session in your
+iTerm window.
 
 The default mapping for invoking the plugin is <leader>t. In a spec
 file, this will run "rspec <filename>". In a test-unit file, this will
@@ -29,7 +28,7 @@ you are in. For example, given the following two files:
         spec/models/foo_bar.rb
 <
 When the current file and is "foo.rb" and you invoke the plugin, the
-following command will be sent the configured tmux pane:
+following command will be sent the configured iTerm pane:
 >
         rspec spec/models/foo_bar.rb
 <
@@ -37,22 +36,22 @@ Note: this plugin does not work well with |autochdir|. The working
 directories for the target pane and vim should match.
 
 
-REPEATING                                        *turbux-repeating*
+REPEATING                                        *itermux-repeating*
 
 If you invoke the plugin (by default, with <leader>t), and neither the
-current file nor the alternate is a test, spec or feature, turbux will
+current file nor the alternate is a test, spec or feature, itermux will
 simply send the most recent command instead. This can be quite helpful
 in situations where you are editing a related file, or in the case of
 cucumber, step definitions or a view.
 
-The |turbux| and |turbux-focused| invocations each store their own
+The |itermux| and |itermux-focused| invocations each store their own
 command, so you can use the focused one elsewhere in a test suite while
 still setting the normal one, or vice-versa.
 
 
-FOCUSED                                          *turbux-focused*
+FOCUSED                                          *itermux-focused*
 
-Turbux also comes with bindings to run focused tests. This is
+iTermux also comes with bindings to run focused tests. This is
 accomplished by appending the current line number to the test command.
 In cucumber, this runs the scenario under the cursor. In rspec, this
 runs only the example or group under the cursor.
@@ -60,12 +59,12 @@ runs only the example or group under the cursor.
 The default mapping for focused test output is <leader>T.
 
 
-MAPPING                                         *turbux-mappings*
+MAPPING                                         *itermux-mappings*
 
-<Plug>SendTestToTmux              Normal invocation
-<Plug>SendFocusedTestToTmux       Focused test (appends line number)
+<Plug>SendTestToiTerm              Normal invocation
+<Plug>SendFocusedTestToiTerm       Focused test (appends line number)
 
-And the following are available unless "g:no_turbux_mappings" is set:
+And the following are available unless "g:no_itermux_mappings" is set:
 
 <leader>t                         Normal invocation
 <leader>T                         Focused test (appends line number)

@@ -1,16 +1,16 @@
-" turbux.vim - Turbo Ruby tests with tmux
+" itermux.vim - Turbo Ruby tests with iTerm
 " Author:      Joshua Davey <http://joshuadavey.com/>
 " Version:     1.0
 
-" Install this file to plugin/turbux.vim.
+" Install this file to plugin/itermux.vim.
 " Relies on the following plugins:
 " - tslime.vim
 " - rails.vim
 
-if exists('g:loaded_turbux') || &cp || v:version < 700
+if exists('g:loaded_itermux') || &cp || v:version < 700
   finish
 endif
-let g:loaded_turbux = 1
+let g:loaded_itermux = 1
 
 function! s:first_readable_file(files) abort
   let files = type(a:files) == type([]) ? copy(a:files) : split(a:files,"\n")
@@ -62,32 +62,32 @@ endfunction
 function! s:send_test(executable)
   let executable = a:executable
   if executable == ''
-    if exists("g:tmux_last_command") && g:tmux_last_command != ''
-      let executable = g:tmux_last_command
+    if exists("g:iTerm_last_command") && g:iTerm_last_command != ''
+      let executable = g:iTerm_last_command
     else
       let executable = 'echo "Warning: No command has been run yet"'
     endif
   endif
-  return Send_to_Tmux("".executable."\n")
+  return Send_to_iTerm("".executable."\n")
 endfunction
 
 " Public functions
-function! SendTestToTmux(file) abort
+function! SendTestToiTerm(file) abort
   let executable = s:command_for_file(a:file)
   if executable != ''
-    let g:tmux_last_command = executable
+    let g:iTerm_last_command = executable
   endif
   return s:send_test(executable)
 endfunction
 
-function! SendFocusedTestToTmux(file, line) abort
+function! SendFocusedTestToiTerm(file, line) abort
   let focus = ":".a:line
 
   if s:prefix_for_test(a:file) != ''
     let executable = s:command_for_file(a:file).focus
-    let g:tmux_last_focused_command = executable
-  elseif exists("g:tmux_last_focused_command") && g:tmux_last_focused_command != ''
-    let executable = g:tmux_last_focused_command
+    let g:iTerm_last_focused_command = executable
+  elseif exists("g:iTerm_last_focused_command") && g:iTerm_last_focused_command != ''
+    let executable = g:iTerm_last_focused_command
   else
     let executable = ''
   endif
@@ -96,12 +96,12 @@ function! SendFocusedTestToTmux(file, line) abort
 endfunction
 
 " Mappings
-nnoremap <silent> <Plug>SendTestToTmux :<C-U>w \| call SendTestToTmux(expand('%'))<CR>
-nnoremap <silent> <Plug>SendFocusedTestToTmux :<C-U>w \| call SendFocusedTestToTmux(expand('%'), line('.'))<CR>
+nnoremap <silent> <Plug>SendTestToiTerm :<C-U>w \| call SendTestToiTerm(expand('%'))<CR>
+nnoremap <silent> <Plug>SendFocusedTestToiTerm :<C-U>w \| call SendFocusedTestToiTerm(expand('%'), line('.'))<CR>
 
-if !exists("g:no_turbux_mappings")
-  nmap <leader>t <Plug>SendTestToTmux
-  nmap <leader>T <Plug>SendFocusedTestToTmux
+if !exists("g:no_itermux_mappings")
+  nmap <leader>t <Plug>SendTestToiTerm
+  nmap <leader>T <Plug>SendFocusedTestToiTerm
 endif
 
 " vim:set ft=vim ff=unix ts=4 sw=2 sts=2:
