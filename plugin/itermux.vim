@@ -1,13 +1,12 @@
 " itermux.vim - Turbo Ruby tests with iTerm
-" Author:      Joshua Davey <http://joshuadavey.com/>
+" Author:      Stefano Verna <http://stefanoverna.com/>
 " Version:     1.0
 
 " Install this file to plugin/itermux.vim.
 " Relies on the following plugins:
-" - tslime.vim
 " - rails.vim
 
-if exists('g:loaded_itermux') || &cp || v:version < 700
+if exists('g:loaded_itermux') || &cp || v:version < 700 || !has('mac')
   finish
 endif
 let g:loaded_itermux = 1
@@ -59,6 +58,31 @@ function! s:command_for_file(file)
   return executable
 endfunction
 
+function! Send_to_iTerm(command)
+  let app = 'iTerm'
+  if exists("g:itermux_app_name") && g:itermux_app_name != ''
+    let app = g:itermux_app_name
+  endif
+  let session = 'iTermux'
+  if exists("g:itermux_session_name") && g:itermux_session_name != ''
+    let session = g:itermux_session_name
+  endif
+
+  let commands =  [ '-e "on run argv"',
+                  \ '-e "tell application \"' . app . '\""',
+                  \ '-e "tell the current terminal"',
+                  \ '-e "tell (first session whose name contains \"' . session . '\")"',
+                  \ '-e "set AppleScript''s text item delimiters to \" \""',
+                  \ '-e "write text (argv as text)"',
+                  \ '-e "end tell"',
+                  \ '-e "end tell"',
+                  \ '-e "end tell"',
+                  \ '-e "end run"' ]
+
+  let complete_command = "osascript " . join(commands, ' ') . " " . a:command
+  return system(complete_command)
+endfunction
+
 function! s:send_test(executable)
   let executable = a:executable
   if executable == ''
@@ -68,7 +92,7 @@ function! s:send_test(executable)
       let executable = 'echo "Warning: No command has been run yet"'
     endif
   endif
-  return Send_to_iTerm("".executable."\n")
+  return Send_to_iTerm(executable)
 endfunction
 
 " Public functions
