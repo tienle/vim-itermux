@@ -23,7 +23,11 @@ endfunction
 
 function! s:prefix_for_test(file)
   if a:file =~# '_spec.rb$'
-    return "rspec "
+    let rspec_opts = ''
+    if exists('g:rspec_drb') && g:rspec_drb == '1'
+      let rspec_opts = '--drb '
+    endif
+    return "rspec " . rspec_opts
   elseif a:file =~# '_test.rb$'
     return "ruby -Itest "
   elseif a:file =~# '.feature$'
